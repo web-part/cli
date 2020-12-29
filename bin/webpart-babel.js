@@ -17,6 +17,8 @@ if (program.args.length < 1) {
     return program.help();
 }
 
+
+
 let opts = program.opts();
 let src = program.args[0];
 let dest = program.args[1] || getDest(src);
