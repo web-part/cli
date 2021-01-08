@@ -3,7 +3,7 @@ require('colors');
 
 const program = require('commander');
 const master = require('@webpart/master');
-const Config = require('../modules/Config');
+const Config = require('./lib/Config');
 
 
 
@@ -17,14 +17,17 @@ program.parse(process.argv);
 
 let opts = program.opts();
 let config = Config.use('build', opts);
+let configMaster = Config.use('master');
 let onRun = Config.get('onRun');
-let defaults = config['defaults'];
+let defaults = config['defaults'] || configMaster['defaults'];
 let options = config['build'];
 
 
 //命令中指定了使用独立打包的方式，合并相应的配置。
 if (opts.pack) {
-    Object.assign(defaults.packages, config['defaults.pack'].packages);
+    let defaultsPack = config['defaults.pack'] || configMaster['defaults.pack'];
+
+    Object.assign(defaults.packages, defaultsPack.packages);
     Object.assign(options, config['build.pack']);
 }
 

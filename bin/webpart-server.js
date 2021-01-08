@@ -4,7 +4,7 @@ require('colors');
 
 const { program, } = require('commander');
 const server = require('@webpart/server');
-const Config = require('../modules/Config');
+const Config = require('./lib/Config');
 
 
 program.option('-p, --port <port>', 'set a port for the server.');

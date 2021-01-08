@@ -85,7 +85,7 @@ module.exports = exports = {
 
 
     use(mid, opts, keys) {
-        let file = opts.config;
+        let file = opts ? opts.config : '';
 
         if (file) {
             exports.set(mid, file);

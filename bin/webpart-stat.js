@@ -2,72 +2,96 @@
 require('colors');
 
 const { program, } = require('commander');
-const stat = require('@webpart/stat');
 const File = require('@definejs/file');
+const Config = require('./lib/Config');
+const Stat = require('./lib/Stat');
+const Find = require('./stat/Find');
+const List = require('./stat/List');
 const Tree = require('./stat/Tree');
-const Config = require('../modules/Config');
-
+const Info = require('./stat/Info');
+const Pair = require('./stat/Pair');
 
 program.option('--config <file>', 'use a specific config file.');
-program.option('--info <file>', 'stat modules and output their infos as JSON file.')
-program.option('--list [file]', 'stat modules and output their ids as a list.');
-program.option('--tree [file]', 'stat modules and output their ids ad a tree.');
+program.option('--info <id>', 'stat module info with specific id.')
+program.option('--list [id]', 'stat modules and output their ids as a list.');
+program.option('--tree [id]', 'stat modules and output their ids ad a tree.');
+program.option('--find <id>', 'find a module to file.');
+program.option('--find-all [id]', 'find all modules to files.');
+program.option('--find-repeat');
+program.option('--pair [id]');
+
+
 program.parse(process.argv);
 
 
 
-
+let destDir = program.args[0];  //指定了 `webpart stat` 后面的参数。 如 `webpart stat stat-output`。
 let opts = program.opts();
-let config = Config.use('stat', opts);
-let infos = stat(config);
+let config = Config.use('stat', opts);  //
 
-//抽取出所有的 id。
-let ids = infos.reduce((ids, info, index) => {
-    let { file, modules, } = info;
+let { moduleStat, htmlStat, } = Stat.parse(config, destDir);
 
-    let list = modules.map((module) => {
-        return module.id;
-    });
+let {
+    infos,
+    ids,
+    file$info,
+    file$module,
+    file$id,
+    id$file,
+    id$info,
+    id$module,
+    id$parent,
+    id$childs,
+    id$children,
+    id$siblings,
+} = moduleStat;
 
-    return [...ids, ...list,];
-}, []);
 
-ids = ids.sort();
+
 
 //指定了 `--info` 选项。
 if (opts.info) {
-    let file = opts.info;
-    File.writeSortJSON(file, infos);
+    Info.render(stat, opts.info);
+    return;
 }
 
 
-//指定了 `--list` 选项。
-if (opts.list) {
-    let file = opts.list;
-    if (typeof file == 'string') {
-        File.writeJSON(file, ids);
-    }
-    else {
-        ids.forEach((id) => {
-            console.log(id.green);
-        });
-    }
-
+//指定了 `--list` 选项。 
+if (opts.list !== undefined) { //此处允许空串。
+    List.render(ids, opts.list);
+    return;
 }
 
-//指定了 `--tree` 选项。
-if (opts.tree) {
-    let file = opts.tree;
-    let tree = Tree.get(ids);
-
-    if (typeof file == 'string') {
-        File.write(file, tree);
-    }
-    else {
-        console.log(tree);
-    }
+//指定了 `--tree` 选项。 生成树状。
+if (opts.tree !== undefined) { //此处允许空串。
+    Tree.render(ids, opts.tree);
+    return;
 }
 
+//指定了 `--find` 选项。 精准查找。
+if (opts.find !== undefined) {//此处允许空串。
+    Find.exact(id$file, opts.find);
+    return;
+}
+
+//指定了 `--find-all` 选项。 模糊查找。
+if (opts.findAll !== undefined) {
+    Find.all(id$file, opts.findAll);
+    return;
+}
+
+if (opts.findRepeat) {
+    console.log(`---- id:file ----`.bold.blue);
+    Find.repeatValues(id$file);
+    console.log(`---- file:id ----`.bold.blue);
+    Find.repeatValues(file$id);
+}
+
+//指定了 `--find` 选项。 精准查找。
+if (opts.pair !== undefined) {//此处允许空串。
+    Pair.match(moduleStat, htmlStat, opts.pair);
+    return;
+}
 
 
 
