@@ -4,24 +4,24 @@ const path = require('path');
 
 module.exports = {
 
-    parse(config, destDir) {
-        let { dir } = config;
+    parse(config) {
+        let { htdocs, output, } = config;
 
-        let moduleInfos = Module.stat(dir, config.module);               //最全面的原始信息。
+        let moduleInfos = Module.stat(htdocs, config.module);               //最全面的原始信息。
         let moduleStat = Analyser.stat(moduleInfos);
 
-        let htmlInfos = HTML.stat(dir, config.html);
+        let htmlInfos = HTML.stat(htdocs, config.html);
         let htmlStat = Analyser.stat(htmlInfos);
 
 
-        if (destDir) {
+        if (output) {
             Object.keys(moduleStat).forEach((key) => {
-                let file = path.join(destDir, `/module/${key}.json`);
+                let file = path.join(output, `/module/${key}.json`);
                 File.writeJSON(file, moduleStat[key]);
             });
 
             Object.keys(htmlStat).forEach((key) => {
-                let file = path.join(destDir, `/html/${key}.json`);
+                let file = path.join(output, `/html/${key}.json`);
                 File.writeJSON(file, htmlStat[key]);
             });
         }

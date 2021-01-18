@@ -1,17 +1,14 @@
 
 
-const path = require('path');
-const { execSync, } = require('child_process');
-const Directory = require('@definejs/directory');
+const Tree = require('@definejs/tree');
 
 
-const TEMP = path.join(__dirname, '__'); //用来产生对应的目录结构的临时目录。
 
 
 
 module.exports = exports = {
     
-    get(ids, node) { 
+    render(ids, node) { 
         //指定了特定的节点作为树根，则先过虑出来。
         if (typeof node == 'string') {
             ids = ids.filter((id) => {
@@ -20,42 +17,26 @@ module.exports = exports = {
         }
 
         if (!ids.length) {
-            console.log('ids.length ZERO'.red);
+            console.log('ids.length = 0'.red);
             return;
         }
-        
 
-        //先删除可能存在的临时目录。
-        Directory.delete(TEMP);
-
-        ids.map((id) => {
-            if (id.startsWith('/')) {
-                id = '(empty)' + id;
-            }
-
-            let file = path.join(TEMP, id);
-            let dir = file + '/';
-          
-            Directory.create(dir); //以目录方式更安全。
+        ids = ids.map((id) => {
+            return id.startsWith('/') ? `(empty)${id}` : id;
         });
 
+        let tree = new Tree(ids, '/');
+        let lines = tree.render();
 
-        let stdout = execSync('tree', { 'cwd': TEMP, });
-        let output = stdout.toString();
+        let content = lines.join('\n');
 
+        console.log(content || '');
+        
 
-        //删除已经创建的临时目录。
-        Directory.delete(TEMP);
-
-        return output;
 
 
     },
 
 
-    render(ids, node) { 
-        let tree = exports.get(ids, node);
-
-        console.log(tree || '');
-    },
+   
 };

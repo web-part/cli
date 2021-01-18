@@ -2,7 +2,6 @@
 require('colors');
 
 const { program, } = require('commander');
-const File = require('@definejs/file');
 const Config = require('./lib/Config');
 const Stat = require('./lib/Stat');
 const Find = require('./stat/Find');
@@ -25,11 +24,10 @@ program.parse(process.argv);
 
 
 
-let destDir = program.args[0];  //指定了 `webpart stat` 后面的参数。 如 `webpart stat stat-output`。
 let opts = program.opts();
 let config = Config.use('stat', opts);  //
 
-let { moduleStat, htmlStat, } = Stat.parse(config, destDir);
+let { moduleStat, htmlStat, } = Stat.parse(config);
 
 let {
     infos,
@@ -51,7 +49,7 @@ let {
 
 //指定了 `--info` 选项。
 if (opts.info) {
-    Info.render(stat, opts.info);
+    Info.render(moduleStat, opts.info);
     return;
 }
 
@@ -82,9 +80,10 @@ if (opts.findAll !== undefined) {
 
 if (opts.findRepeat) {
     console.log(`---- id:file ----`.bold.blue);
-    Find.repeatValues(id$file);
+    Find.repeat(id$file);
+
     console.log(`---- file:id ----`.bold.blue);
-    Find.repeatValues(file$id);
+    Find.repeat(file$id);
 }
 
 //指定了 `--find` 选项。 精准查找。

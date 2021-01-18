@@ -2,6 +2,7 @@
 const $String = require('@definejs/string');
 const Lines = require('@definejs/lines');
 const Stat = require('../lib/Stat');
+const Key$Value = require('../lib/Key$Value');
 
 
 function printList(title, list, id$file) {
@@ -11,26 +12,11 @@ function printList(title, list, id$file) {
 
     list = [...new Set(list)];
 
-    let len = list.length.toString().length;
+    console.log(`  `, `${title}:`.bold, `(${list.length})`.bold,);
 
-    console.log(`  `, `${title}:`.bold, `(${list.length})`.bold.yellow,);
-
-    list.forEach((id, index) => {
-        let no = $String.padLeft(index + 1, len, '0');
-        let file = id$file[id]; //可能为数组。
-
-        //一个 id 存在于多个文件，即重复定义了。
-        if (Array.isArray(file)) {
-            // console.log(`Warning: repeated define module`.red, `'${id.magenta}'`);
-
-            file.forEach((file, index) => {
-                console.log(`    `, `${no}.${index + 1}`.grey, id.red, `(${file.underline.cyan})`.italic.grey);
-            });
-        }
-        else { //一对一关系。
-            console.log(`    `, `${no}`.grey, id.green, `(${file.underline.cyan})`.italic.grey);
-
-        }
+    Key$Value.render(id$file, {
+        'keys': list,
+        'tabs': 4,
     });
 
 }

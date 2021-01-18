@@ -1,6 +1,7 @@
 
 require('colors')
 
+const Key$Value = require('../lib/Key$Value');
 
 function render(moduleStat, htmlStat, id) {
     let jsFile = moduleStat.id$file[id];
@@ -106,4 +107,7 @@ module.exports = {
         // console.log(`jsIds:`, jsIds);
         // console.log(`htmlIds:`, htmlIds);
     },
+
+   
+    
 };
