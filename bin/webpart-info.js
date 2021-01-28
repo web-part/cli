@@ -1,30 +1,31 @@
 #!/usr/bin/env node
-require('colors');
+
+//用法：
+//  webpart info <id>   显示指定模块的信息。
+//参数：
+//  <id>    必选，要显示的模块 id。
+//示例：
+//  webpart info API
+//强依赖配置节点：
+//  stat
 
 
-const { program, } = require('commander');
-const { execFile, execFileSync, } = require('child_process');
+const Program = require('./lib/Program');
+const Stat = require('./lib/Stat');
+const Info = require('./info/Info');
 
-program.parse(process.argv);
+
+const { config, args, program, } = Program.parse({
+    'config': true,
+    '<id>': '',
+});
 
 
-let id = program.args[0];
-let args = ['stat', '--info',];
-
-if (id === undefined) {
-    console.log(`error: missing argument <id>`.red);
-    return;
+if (args.length < 1) {
+    return program.help();
 }
 
-args = [...args, id];
+let id = args[0];
+let { moduleStat, htmlStat, } = Stat.parse(config.stat);
 
-
-//实际调用的是 `webpart stat --tree [id]` 之类的。
-execFile('webpart', args, function (error, stdout) {
-    if (error) {
-        console.log(error.message.red);
-        return;
-    }
-
-    console.log(stdout);
-});
+Info.render(moduleStat, id);

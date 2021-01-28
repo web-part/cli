@@ -1,32 +1,29 @@
 #!/usr/bin/env node
-require('colors');
+
+//用法：
+//  webpart pair [id] 把 js 模块和 html 模块作匹配。
+//参数：
+//  [id] 可选，要匹配的特定模块 id。
+//示例：
+//  webpart pair        
+//  webpart pair API
+//强依赖配置节点：
+//  stat
 
 
-const { program, } = require('commander');
-const { execFile, execFileSync, } = require('child_process');
+const Program = require('./lib/Program');
+const Stat = require('./lib/Stat');
+const Pair = require('./pair/Pair');
 
 
-
-program.parse(process.argv);
-
-
-let opts = program.opts();
-let id = program.args[0];
-let cmd = '--pair';
-let args = ['stat', cmd,];
-
-if (id !== undefined) { //此处允许空字符串。
-    args = [...args, id,];
-}
-
-
-//实际调用的是 `webpart stat --pair <id>` 之类的。
-execFile('webpart', args, function (error, stdout) {
-    if (error) {
-        console.log(error.message.red);
-        return;
-    }
-    
-    console.log(stdout);
-
+let { args, config, } = Program.parse({
+    'config': true,
 });
+
+let id = args[0];
+let { moduleStat, htmlStat, } = Stat.parse(config.stat);
+
+
+Pair.match(moduleStat, htmlStat, id);
+
+

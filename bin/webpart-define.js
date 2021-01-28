@@ -1,34 +1,47 @@
 #!/usr/bin/env node
-require('colors');
 
-const { program, } = require('commander');
+//用法：
+//  webpart define <module-id> [dest-file]
+//参数：
+//  <module-id>     必选，要定义的模块 id。
+//  [dest-file]     可选，要输出的目标文件。
+//选项：
+//  --type <type>   要定义的模块类型，可用的值有：`module`、`panel`、`view`，默认为 `module`。
+//示例：
+//  webpart define API
+//  webpart define /Home --type view
+//  webpart define /Home/Main --type panel
+//强依赖配置节点：
+//  define
+
+
+
 const path = require('path');
 const $String = require('@definejs/string');
 const File = require('@definejs/file');
-const Config = require('./lib/Config');
+const Program = require('./lib/Program');
+
+
+let { opts, args, config, } = Program.parse({
+    'config': true,
+    '<module-id> [dest-file]': '',
+    '--type <type>': 'set define type.',
+});
 
 
 
-program.option('--config <file>', 'use a specific config file.');
-program.option('-t, --type <type>', 'set define type.', 'module');
-program.option('-o, --out <file>', 'output dest file.');
-program.parse(process.argv);
-
-
-let opts = program.opts();
-let config = Config.use('define', opts);  //
-let id = program.args[0];
-let file = program.args[1];
-let type = opts.type;
-let sample = config[type];
+let id = args[0];
+let file = args[1];
+let type = opts.type || 'module';
+let sample = config.define[type];
 
 if (!id) {
-    console.log(`error: argument missing 'module-id'`.red);
+    console.log(`Error:`.bold.red, `missing argument <module-id>`.red);
     return;
 }
 
 if (!sample) {
-    console.log(`error: template not exists: '${type}'`.red);
+    console.log(`Error:`.bold.red, `template not found: '${type}'`.red);
     return;
 }
 
@@ -43,15 +56,15 @@ if (file) {
     }
 
     if (File.exists(file)) {
-        console.log(`dest file is already existed:`.red, file.red);
+        console.log(`Existed:`.bold.red, file.underline.cyan);
         return;
     }
 
     File.write(file, content, null);
-    console.log(`File created:`.green, file.cyan);
+    console.log(`Created:`.bold.green, file.underline.cyan);
 }
 else {
-    console.log(content.grey);
+    console.log(content.blue);
 }
 
 

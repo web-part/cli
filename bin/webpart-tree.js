@@ -1,27 +1,34 @@
 #!/usr/bin/env node
-require('colors');
+
+//用法：
+//  webpart tree [id]
+//参数：
+//  [id]    可选，要显示的指定的模块 id。
+//选项：
+//  --file  显示模块的在的文件路径。
+//示例：
+//  webpart tree                显示所有模块的树形结构图。
+//  webpart tree API            显示 API 模块下的子树结构图。
+//  webpart tree --file
+//  webpart tree API --file
+//强依赖配置节点：
+//  stat
 
 
-const { program, } = require('commander');
-const { execFile, execFileSync, } = require('child_process');
-
-program.parse(process.argv);
-
-
-let id = program.args[0];
-let args = ['stat', '--tree',];
-
-if (id !== undefined) { //此处允许空字符串。
-    args = [...args, id,];
-}
+const Program = require('./lib/Program');
+const Stat = require('./lib/Stat');
+const Tree = require('./tree/Tree');
 
 
-//实际调用的是 `webpart stat --tree [id]` 之类的。
-execFile('webpart', args, function (error, stdout) {
-    if (error) {
-        console.log(error.message.red);
-        return;
-    }
-
-    console.log(stdout);
+let { opts, config, args, } = Program.parse({
+    'config': true,
+    '--file': 'show files.',
 });
+
+
+let id = args[0];
+let { moduleStat, htmlStat, } = Stat.parse(config.stat);
+let { ids, id$file, } = moduleStat;
+let obj = opts.file ? id$file : null;
+
+Tree.render(ids, id, obj);

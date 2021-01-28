@@ -1,6 +1,33 @@
 const File = require('@definejs/file');
+const MD5 = require('@definejs/md5');
 const { Module, HTML, Analyser, } = require('@webpart/stat');
 const path = require('path');
+
+
+
+function write(output, type, infos, stat) {
+    let home = path.join(output, `/${type}/`);      //如 `output/stat/module/`。
+    let file = `${home}infos.json`;                 //如 `output/stat/module/infos.json`。
+    let changed = true;
+
+    if (File.exists(file)) {
+        let json = JSON.stringify(infos, null, 4);
+        let a = MD5.get(json);
+        let b = MD5.read(file);
+
+        changed = (a != b);
+    }
+
+    if (!changed) {
+        return;
+    }
+
+    Object.keys(stat).forEach((key) => {
+        let file = `${home}${key}.json`;
+
+        File.writeJSON(file, stat[key]);
+    });
+}
 
 module.exports = {
 
@@ -15,15 +42,8 @@ module.exports = {
 
 
         if (output) {
-            Object.keys(moduleStat).forEach((key) => {
-                let file = path.join(output, `/module/${key}.json`);
-                File.writeJSON(file, moduleStat[key]);
-            });
-
-            Object.keys(htmlStat).forEach((key) => {
-                let file = path.join(output, `/html/${key}.json`);
-                File.writeJSON(file, htmlStat[key]);
-            });
+            write(output, 'module', moduleInfos, moduleStat);
+            write(output, 'html', htmlInfos, htmlStat);
         }
 
         return {
@@ -36,7 +56,7 @@ module.exports = {
 
     tryWarnDuplicated(id, list, fn) { 
         if (list === undefined) {
-            console.log(`Not exist module:`.red, id.magenta);
+            console.log(`Module Not Found:`.bold.red, id.magenta);
             process.exit();
         }
 

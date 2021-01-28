@@ -20,6 +20,7 @@
     "@definejs/file": "^1.0.0",
     "@definejs/lines": "^1.0.0",
     "@definejs/md5": "^1.0.0",
+    "@definejs/object": "^1.1.0",
     "@definejs/patterns": "^1.0.0",
     "@definejs/string": "^1.0.0",
     "@definejs/tree": "^1.0.0",

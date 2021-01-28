@@ -1,6 +1,6 @@
 
 
-module.exports = {
+module.exports = exports = {
 
     add(key$value, key, value) {
         let has = key in key$value;
@@ -25,26 +25,35 @@ module.exports = {
 
     },
 
-
-
     /**
     * 
-    * 
+    * 已重载 each(key$value, opts, fn);
+    * 已重载 each(key$value, fn);
     * @param {*} key$value 
-    * @param {*} opts 
+    * @param {*} opts
+    * {
+    *   keys: [],   //需要过滤出来的键列表。
+    * }
     */
-    render(key$value, opts) {
-        let { onlyArray, keys, tabs, } = opts || {};
+    each(key$value, opts, fn) {
+        if (typeof opts == 'fn') {
+            fn = opts;
+            opts = null;
+        }
+
+
+        let { onlyArray, keys, } = opts || {};
         let skey$value = {};
 
-        keys = keys || [];
-        tabs = tabs > 0 ? Array(tabs + 1).join(' ') : '';
-        
-
         //指定了只处理部分 key，则先提取出来。
-        if (keys.length > 0) {
+        if (keys && keys.length > 0) {
             keys.forEach((key) => {
-                skey$value[key] = key$value[key];
+                if (key in key$value) {
+                    skey$value[key] = key$value[key];
+                }
+                else {
+                    console.log(`Not Found: ${key}`.red);
+                }
             });
         }
         else { //否则处理全部 key。
@@ -52,19 +61,44 @@ module.exports = {
         }
 
 
-        Object.keys(skey$value).forEach((key) => {
-            let value = key$value[key];
+        let list = Object.keys(skey$value);
+
+        list.forEach((key, index) => {
+            let value = skey$value[key];
             let isArray = Array.isArray(value);
 
             if (!isArray && onlyArray) {
                 return;
             }
 
+            fn(key, value, index, list);
+        })
+    },
+
+
+
+    /**
+    * 
+    * 
+    * @param {*} key$value 
+    * @param {*} opts
+    * {
+    *   keys: [],   //需要过滤出来的键列表。
+    * }
+    */
+    render(key$value, opts = {}) {
+
+        let { tabs, } = opts;
+
+        tabs = tabs > 0 ? Array(tabs + 1).join(' ') : '';
+
+        exports.each(key$value, opts, function (key, value, index, list) {
+            let isArray = Array.isArray(value);
+
             if (!isArray) {
-                console.log(`${tabs}${key.green}:`, value.underline.cyan);
+                console.log(`${tabs}${key.green}`, `→ `, value.underline.cyan);
                 return;
             }
-
 
             let values = value;
             let maxIndex = values.length - 1;
@@ -76,6 +110,10 @@ module.exports = {
 
                 console.log(`${tabs}${prefix}`, value.underline.cyan);
             });
-        })
+        });
+        
+
+
+        
     },
 };

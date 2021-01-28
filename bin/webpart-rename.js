@@ -1,31 +1,40 @@
 #!/usr/bin/env node
-require('colors');
 
-const { program, } = require('commander');
+//用法：
+//  webpart rename <id> <new-id>
+//参数：
+//  <id>        原模块 id。
+//  <new-id>    新模块 id。
+//选项：
+//  -a, --abbr  输出的新模块 id 是否为短名称。
+//示例：
+// webpart rename --abbr /Login/Main Main2
+//强依赖配置节点：
+//  stat
+
+
 const File = require('@definejs/file');
-const Config = require('./lib/Config');
+const Program = require('./lib/Program');
 const Stat = require('./lib/Stat');
 const Task = require('./rename/Task');
 
 
 
-program.option('--config <file>', 'use a specific config file.');
-program.option('-t, --type <type>', 'set define type.', 'module');
-program.option('-o, --out <file>', 'output dest file.');
-program.option('-a, --abbr', 'abbreviate the module id.');
-program.parse(process.argv);
+let { opts, config, args, program, } = Program.parse({
+    'config': true,
+    '<id> <new-id>': '',
+    '-a, --abbr': 'abbreviate the module id.',
+});
 
-
-let id = program.args[0];
-let newId = program.args[1];
-
-if (!id || !newId) {
-    console.log(`error: missing argument`.red);
-    console.log('usage: webpart rename id newId.'.magenta);
-    return;
+if (args.length < 2) {
+    return program.help();
 }
 
-let opts = program.opts();
+
+
+let id = args[0];
+let newId = args[1];
+
 
 //采用了目标模块 id 省略前缀的写法。
 //例如：`webpart rename --abbr /Login/Main Main2 ` 
@@ -36,13 +45,11 @@ if (opts.abbr && id.includes('/')) {
 }
 
 
-let config = Config.use('stat', opts);  //
-let stat = Stat.parse(config);
-
+let stat = Stat.parse(config.stat);
 let list = Task.rename(stat, id, newId);
 
 if (!list) {
-    console.log(`rename failed`.red);
+    console.log(`Rename Failed`.red);
     return;
 }
 

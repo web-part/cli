@@ -1,43 +1,52 @@
 #!/usr/bin/env node
-require('colors');
+
+//用法：
+//  webpart find [id]   查找模块。
+//选项：
+//  -a, --all       使用模糊匹配模式来查找全部相关的模块。 
+//  -r, --repeat    查找重复定义的模块或一个文件里定义了多个模块的文件。
+//示例：
+//  webpart find API
+//  webpart find API --all
+//  webpart find --repeat
+//  webpart find API --repeat
+//强依赖配置节点：
+//  stat
 
 
-const { program, } = require('commander');
-const { execFile, execFileSync, } = require('child_process');
-
-program.option('-a, --all', 'find all mdoules to files.');
-program.option('-r, --repeat', 'find repeated mdoules to files.');
-
-program.parse(process.argv);
+const Program = require('./lib/Program');
+const Stat = require('./lib/Stat');
+const Find = require('./find/Find');
 
 
-let opts = program.opts();
-let id = program.args[0];
-let cmd = '--find';
-
-if (opts.all) {
-    cmd += '-all';
-}
-else if (opts.repeat) {
-    cmd += '-repeat';
-}
-
-
-    
-let args = ['stat', cmd,];
-
-if (id !== undefined) { //此处允许空字符串。
-    args = [...args, id,];
-}
-
-
-//实际调用的是 `webpart stat --find-all <id>` 之类的。
-execFile('webpart', args, function (error, stdout) {
-    if (error) {
-        console.log(error.message.red);
-        return;
-    }
-    
-    console.log(stdout);
-
+let { opts, args, config, program, } = Program.parse({
+    'config': true,
+    '[id]': '',
+    '-a, --all': 'find all mdoules to files.',
+    '-r, --repeat': 'find repeated mdoules to files.',
 });
+
+
+
+let id = args[0];
+
+let { moduleStat, htmlStat, } = Stat.parse(config.stat);
+let { file$id, id$file, } = moduleStat;
+
+if (opts.repeat) {
+    Find.repeat(id$file, id);
+    console.log(``);
+    Find.repeat(file$id, id);
+    return;
+}
+
+if (!id) {
+    return program.help();
+}
+
+if (opts.all !== undefined) {
+    Find.all(id$file, id);
+    return;
+}           
+
+Find.exact(id$file, id);

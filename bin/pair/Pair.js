@@ -11,15 +11,16 @@ function render(moduleStat, htmlStat, id) {
     if (Array.isArray(jsFile)) {
         console.log(`Error:`.bgRed, `The JS module`.red, `'${id.magenta}'`, `is defined in different files:`.red);
         jsFile.forEach((file, index) => {
-            console.log(`  `, file.underline.grey);
+            console.log(`  `, file.underline.red);
         });
         hasError = true;
     }
 
     if (Array.isArray(htmlFile)) {
         console.log(`Error:`.bgRed, `The HTML module`.red, `'${id.magenta}'`, `is defined in different files:`.red);
+
         htmlFile.forEach((file, index) => {
-            console.log(`  `, file.underline.grey);
+            console.log(`  `, file.underline.red);
         });
         hasError = true;
     }
@@ -50,6 +51,7 @@ function render(moduleStat, htmlStat, id) {
 
 
 module.exports = {
+
     match(moduleStat, htmlStat, id) {
 
         if (typeof id == 'string') {
@@ -85,18 +87,6 @@ module.exports = {
 
         });
 
-        // matchedIds.forEach((id) => {
-        //     render(moduleStat, htmlStat, id);
-        // });
-
-        // jsIds.forEach((id) => {
-        //     render(moduleStat, htmlStat, id);
-        // });
-
-        // htmlIds.forEach((id) => {
-        //     render(moduleStat, htmlStat, id);
-        // });
-
         [
             ...matchedIds,
             ...jsIds,
@@ -104,8 +94,7 @@ module.exports = {
         ].forEach((id) => {
             render(moduleStat, htmlStat, id);
         });
-        // console.log(`jsIds:`, jsIds);
-        // console.log(`htmlIds:`, htmlIds);
+       
     },
 
    

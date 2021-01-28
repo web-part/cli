@@ -14,9 +14,14 @@ module.exports = {
         });
     },
 
-    repeat(key$value) {
+    repeat(key$value, sid) {
+        let keys = sid ? Object.keys(key$value).filter((key) => {
+            return key.includes(sid);
+        }) : [];
+
         Key$Value.render(key$value, {
             'onlyArray': true,
+            'keys': keys,
         });
     },
 
@@ -26,10 +31,6 @@ module.exports = {
     * @param {string} sid 要搜索的 id 或其子串。
     */
     all(id$file, sid) {
-        if (sid === true) {
-            Key$Value.render(id$file);
-            return;
-        }
 
         let mid$file = null;
 
@@ -65,5 +66,5 @@ module.exports = {
         }
     },
 
-    
+
 };

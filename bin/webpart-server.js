@@ -1,30 +1,38 @@
 #!/usr/bin/env node
 
+//用法：
+//  webpart server      用默认端口以当前目录为根目录创建一个服务器。
+//选项：
+//  -p, --port <port>   使用指定的端口号。
+//  -o, --open          完成后自动打开浏览器。
+//示例：
+//  webpart server
+//  webpart server --port 8011
+//  webpart server --open
+//  webpart server --open --port 8011
+//弱依赖配置节点：
+//  server
+
 require('colors');
 
-const { program, } = require('commander');
 const server = require('@webpart/server');
-const Config = require('./lib/Config');
+const Program = require('./lib/Program');
+const PORT = 8000;
 
 
-program.option('-p, --port <port>', 'set a port for the server.');
-program.option('-o, --open', 'auto open browser when server is runnig.');
-program.option('--config <file>', 'use a specific config file.');
-program.parse(process.argv);
+let { opts, config, } = Program.parse({
+    'config': undefined,
+    '-p, --port <port>': 'set a port for the server.',
+    '-o, --open': 'auto open browser when server is runnig.',
+});
 
 
+let cfg = Program.mergeConfig(config.server, opts, ['port', 'open',]);
 
-let opts = program.opts();
+cfg.port = cfg.port || PORT;
 
-let config = Config.use('server', opts, [
-    'port',
-    'open',
-]);
-
-config.port = config.port || 8000;
-
-config.statics = config.statics || {
+cfg.statics = cfg.statics || {
     '/': './',
 };
 
-server.start(config);
+server.start(cfg);
