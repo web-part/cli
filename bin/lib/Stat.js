@@ -25,7 +25,7 @@ function write(output, type, infos, stat) {
     Object.keys(stat).forEach((key) => {
         let file = `${home}${key}.json`;
 
-        File.writeJSON(file, stat[key]);
+        File.writeSortJSON(file, stat[key]);
     });
 }
 

@@ -18,6 +18,7 @@ program.command('md5', 'md5 a file.');
 program.command('minify', 'minify js、css、html、json files.');
 program.command('pair', 'pair match JS module and HTML module.');
 program.command('rename', 'rename a module and its children.');
+program.command('require', 'find who require the module.');
 program.command('server', 'start a local web server for development stage. ');
 program.command('tree', 'stat modules and output their ids ad a tree.');
 program.command('watch', 'compile website and watch files for development stage.');

@@ -17,8 +17,6 @@ require('colors');
 
 const server = require('@webpart/server');
 const Program = require('./lib/Program');
-const PORT = 8000;
-
 
 let { opts, config, } = Program.parse({
     'config': undefined,
@@ -29,7 +27,7 @@ let { opts, config, } = Program.parse({
 
 let cfg = Program.mergeConfig(config.server, opts, ['port', 'open',]);
 
-cfg.port = cfg.port || PORT;
+
 
 cfg.statics = cfg.statics || {
     '/': './',

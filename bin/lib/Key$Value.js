@@ -3,6 +3,9 @@
 module.exports = exports = {
 
     add(key$value, key, value) {
+        if (key == 'Native') {
+            console.log('--------Native')
+        }
         let has = key in key$value;
 
         if (!has) {
@@ -11,6 +14,11 @@ module.exports = exports = {
         }
 
         let old = key$value[key];
+
+        if (key == 'Native') {
+            console.log('old:', old, 'new:', value);
+        }
+
         if (old === value) {
             return;
         }
@@ -31,9 +39,10 @@ module.exports = exports = {
     * 已重载 each(key$value, fn);
     * @param {*} key$value 
     * @param {*} opts
-    * {
-    *   keys: [],   //需要过滤出来的键列表。
-    * }
+    *   opts = {
+    *       keys: [],           //需要过滤出来的键列表。
+    *       onlyArray: false,   //是否仅显示值为数组的项。
+    *   };
     */
     each(key$value, opts, fn) {
         if (typeof opts == 'fn') {
@@ -80,11 +89,13 @@ module.exports = exports = {
     /**
     * 
     * 
-    * @param {*} key$value 
-    * @param {*} opts
-    * {
-    *   keys: [],   //需要过滤出来的键列表。
-    * }
+    * @param {Object} key$value 
+    * @param {Object} opts
+    *   opts = {
+    *       keys: [],           //需要过滤出来的键列表。
+    *       tabs: 0,            //缩进的空格数。
+    *       onlyArray: false,   //是否仅显示值为数组的项。
+    *   };
     */
     render(key$value, opts = {}) {
 
