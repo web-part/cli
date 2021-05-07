@@ -3,9 +3,7 @@
 module.exports = exports = {
 
     add(key$value, key, value) {
-        if (key == 'Native') {
-            console.log('--------Native')
-        }
+        
         let has = key in key$value;
 
         if (!has) {
@@ -15,9 +13,6 @@ module.exports = exports = {
 
         let old = key$value[key];
 
-        if (key == 'Native') {
-            console.log('old:', old, 'new:', value);
-        }
 
         if (old === value) {
             return;

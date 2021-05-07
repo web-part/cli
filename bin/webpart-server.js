@@ -26,11 +26,11 @@ let { opts, config, } = Program.parse({
 
 
 let cfg = Program.mergeConfig(config.server, opts, ['port', 'open',]);
-
+let done = cfg.done;
 
 
 cfg.statics = cfg.statics || {
     '/': './',
 };
 
-server.start(cfg);
+server.start(cfg, done);
