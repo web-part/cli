@@ -1,24 +1,27 @@
 #!/usr/bin/env node
 
+//该命令是 webpart watch 的一个子版本。
+//用于仅编译网站项目，但完成后不开启监控。
+//在某些场景下，可能需要仅编译但不开启监控。
+
 //用法：
-//  webpart build   编译整个网站项目以用于生产环境。
+//  webpart compile   编译整个网站项目。
 //选项：
 //  -c, --compat    使用兼容模式。 主要针对低版本的 IE。
 //  -p, --pack      使用分包模式。 把相关的资源打包成一个独立的分包以用于懒加载。
 //示例：
-//  webpart build
-//  webpart build --compat
-//  webpart build --pack
-//  webpart build --compat --pack
+//  webpart compile
+//  webpart compile --compat
+//  webpart compile --pack
+//  webpart compile --compat --pack
 //强依赖配置节点：
-//  build
+//  compile
 //  master
 //  masterEvents
 
-
-
 const master = require('@webpart/master');
 const Program = require('./lib/Program');
+
 
 let { opts, config, } = Program.parse({
     'config': true,
@@ -27,7 +30,7 @@ let { opts, config, } = Program.parse({
 });
 
 let defaults = config.master[''];
-let options = config.build[''];
+let options = config.compile[''];
 let events = config.masterEvents || {};
 
 
@@ -37,22 +40,7 @@ if (opts.pack) {
     let defaultsPack = config.master['.pack'];
 
     Object.assign(defaults.packages, defaultsPack.packages);
-    Object.assign(options, config.build['.pack']);
-}
-
-//增加额外的配置。
-{
-    //compat: 兼容模式。 
-    //normal: 标准模式。
-    let mode = opts.compat ? 'compat' : 'normal';           
-
-    //增加额外的 excludes，即构建前要排除在外的文件或目录。
-    let excludes = config.build[`.${mode}`].excludes || [];
-
-    options.excludes = [
-        ...options.excludes,
-        ...excludes,
-    ];
+    Object.assign(options, config.compile['.pack']);
 }
 
 master.config(defaults);    //
@@ -62,11 +50,12 @@ master.on('init', function (website) {
     let mode = opts.compat ? 'compat' : 'normal';           //compat: 兼容模式。 normal: 标准模式。
     let process = require(`@webpart/process-${mode}`);
 
-    process.build(website);
+    process.watch(website);
 });
 
-master.on('done', 'build', function (website) {
-    
+master.on('done', 'compile', function (website) {
+
 });
 
-master.build(options);
+
+master.compile(options);

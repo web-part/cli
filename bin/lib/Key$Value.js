@@ -1,4 +1,5 @@
 
+const console = require('@webpart/console');
 
 module.exports = exports = {
 

@@ -9,6 +9,7 @@ program.usage('<command> [options]');   //定义使用方法。
 //定义命令。
 program.command('babel', 'babel a file.');
 program.command('build', 'compile website for production stage.');
+program.command('compile', 'compile website for development stage.');
 program.command('define', 'define a module.');
 program.command('find', 'find a module to its file.');
 program.command('info', 'stat module info with specific id.');
@@ -17,6 +18,8 @@ program.command('list', 'stat modules output their ids ad a list.');
 program.command('md5', 'md5 a file.');
 program.command('minify', 'minify js、css、html、json files.');
 program.command('pair', 'pair match JS module and HTML module.');
+program.command('parse', 'parse website.');
+// program.command('qr', 'open QR-Code.');
 program.command('rename', 'rename a module and its children.');
 program.command('require', 'find who require the module.');
 program.command('server', 'start a local web server for development stage. ');

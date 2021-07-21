@@ -1,5 +1,5 @@
 
-
+const console = require('@webpart/console');
 const fs = require('fs');
 const Directory = require('@definejs/directory');
 

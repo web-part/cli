@@ -13,6 +13,7 @@
 //  stat
 
 
+const console = require('@webpart/console');
 const File = require('@definejs/file');
 const Program = require('./lib/Program');
 const Stat = require('./lib/Stat');

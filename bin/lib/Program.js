@@ -1,6 +1,7 @@
 
 require('colors');
 
+const console = require('@webpart/console');
 const { Command, } = require('commander');
 const $Object = require('@definejs/object');
 const Config = require('./Program/Config');
@@ -29,7 +30,12 @@ module.exports = {
         let opts = program.opts();
         let config = Config.use(opts.config, options.config);
 
-        return { program, opts, config, args,  };
+        //设置全局的 console 配置。
+        if (config.console) {
+            console.file = config.console.file;
+        }
+
+        return { program, opts, config, args, };
     },
 
     mergeConfig: Config.merge,

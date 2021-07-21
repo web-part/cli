@@ -1,5 +1,6 @@
 
 
+const console = require('@webpart/console');
 const Key$Value = require('../lib/Key$Value');
 
 

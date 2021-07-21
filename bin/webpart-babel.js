@@ -14,6 +14,7 @@
 
 
 
+const console = require('@webpart/console');
 const fs = require('fs');
 const Program = require('./lib/Program');
 const babel = require('@webpart/process-babel');
@@ -21,7 +22,7 @@ const Dest = require('./babel/Dest');
 
 
 let { opts, args, program, } = Program.parse({
-    'config': false,
+    'config': undefined, //可以有。 如果有则用，否则不要求。
     '<src-file> [dest-file]': '',
     '-f, --force': 'force to overwite the dest file when it is existed.',
 });

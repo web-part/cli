@@ -49,11 +49,11 @@ module.exports = {
             return file;
         });
 
-        // console.log(patterns);
+ 
 
         files = Patterns.getFiles(patterns);
 
-        // console.log(files);
+      
 
         return files;
 

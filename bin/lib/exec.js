@@ -1,6 +1,7 @@
 
 require('colors');
 
+const console = require('@webpart/console');
 const { execFile, } = require('child_process');
 
 

@@ -3,7 +3,6 @@ require('colors');
 
 const path = require('path');
 const fs = require('fs');
-const { program } = require('commander');
 const NAME = 'webpart.config.js';
 
 

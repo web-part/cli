@@ -14,6 +14,7 @@
 //  stat
 
 
+const console = require('@webpart/console');
 const Program = require('./lib/Program');
 const Stat = require('./lib/Stat');
 const Find = require('./find/Find');

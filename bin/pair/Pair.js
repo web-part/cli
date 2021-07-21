@@ -1,7 +1,8 @@
 
-require('colors')
+require('colors');
 
-const Key$Value = require('../lib/Key$Value');
+const console = require('@webpart/console');
+
 
 function render(moduleStat, htmlStat, id) {
     let jsFile = moduleStat.id$file[id];

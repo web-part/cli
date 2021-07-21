@@ -1,6 +1,6 @@
 
 
-const path = require('path');
+const console = require('@webpart/console');
 const { exec, } = require('child_process');
 const ora = require('ora');
 

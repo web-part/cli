@@ -20,7 +20,7 @@ const App = require('./md5/App');
 
 
 let { opts, args, } = Program.parse({
-    'config': false,
+    'config': undefined, //可以有。 如果有则用，否则不要求。
     '-r, --repeat': 'show repeat only.', //仅显示内容重复的文件。
 });
 

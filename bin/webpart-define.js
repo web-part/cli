@@ -16,6 +16,7 @@
 
 
 
+const console = require('@webpart/console');
 const path = require('path');
 const $String = require('@definejs/string');
 const File = require('@definejs/file');

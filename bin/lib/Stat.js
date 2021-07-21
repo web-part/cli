@@ -1,3 +1,4 @@
+const console = require('@webpart/console');
 const File = require('@definejs/file');
 const MD5 = require('@definejs/md5');
 const { Module, HTML, Analyser, } = require('@webpart/stat');

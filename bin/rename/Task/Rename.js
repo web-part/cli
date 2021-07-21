@@ -1,4 +1,6 @@
 
+const console = require('@webpart/console');
+
 module.exports = {
 
     
@@ -13,9 +15,7 @@ module.exports = {
             id$module,
             id$childs,
         } = stat;
-// console.log(id$file)
 
-//         return;
         let file = id$file[id];
 
         if (!file) {

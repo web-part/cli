@@ -10,6 +10,7 @@
 //  webpart minify index.js index.min.js
 
 
+const console = require('@webpart/console');
 const path = require('path');
 const master = require('@webpart/master');
 const Program = require('./lib/Program');
@@ -19,7 +20,7 @@ const Edition = master.require('Edition');
 
 
 let { args, } = Program.parse({
-    'config': false,
+    'config': undefined, //可以有。 如果有则用，否则不要求。
     '<src-file>': '',
 });
 
@@ -27,7 +28,7 @@ let { args, } = Program.parse({
 let src = args[0];
 
 if (!src) {
-    console.log(`Error:`.bold.red, `missing argument <src>`.red)
+    console.log(`Error:`.bold.red, `missing argument <src-file>`.red)
     return;
 }
 

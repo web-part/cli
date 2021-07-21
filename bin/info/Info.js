@@ -1,5 +1,5 @@
 
-const $String = require('@definejs/string');
+const console = require('@webpart/console');
 const Lines = require('@definejs/lines');
 const Stat = require('../lib/Stat');
 const Key$Value = require('../lib/Key$Value');

@@ -1,5 +1,6 @@
 
 
+const console = require('@webpart/console');
 const Tree = require('@definejs/tree');
 
 function add(id$count, id) {

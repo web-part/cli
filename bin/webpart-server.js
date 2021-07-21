@@ -16,21 +16,24 @@
 require('colors');
 
 const server = require('@webpart/server');
+const openUrl = require('open');
 const Program = require('./lib/Program');
 
 let { opts, config, } = Program.parse({
-    'config': undefined,
+    'config': undefined, //可以有。 如果有则用，否则不要求。
     '-p, --port <port>': 'set a port for the server.',
     '-o, --open': 'auto open browser when server is runnig.',
 });
 
 
-let cfg = Program.mergeConfig(config.server, opts, ['port', 'open',]);
+let cfg = Program.mergeConfig(config.server, opts, ['port',]);
 let done = cfg.done;
 
 
-cfg.statics = cfg.statics || {
-    '/': './',
-};
+server.start(cfg, function (app, info) {
+    if (opts.open) {
+        openUrl(`http://localhost:${info.server.port}`);
+    }
 
-server.start(cfg, done);
+    done && done(app, info);
+});
