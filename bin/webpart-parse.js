@@ -7,6 +7,7 @@
 //示例：
 //  webpart parse
 //  webpart parse --pack
+//  webpart parse --output website.json
 //强依赖配置节点：
 //  master
 //  masterEvents
