@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 //用法：
-//  webpart rename <id> <new-id>
+//  webpart rename <id> <new-id> 对指定模块及所有子模块进行重命名。
 //参数：
 //  <id>        原模块 id。
 //  <new-id>    新模块 id。
