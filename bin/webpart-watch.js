@@ -15,8 +15,8 @@
 //  master
 //  masterEvents
 
-
 const master = require('@webpart/master');
+const File = require('@definejs/file');
 const Program = require('./lib/Program');
 
 
@@ -51,7 +51,21 @@ master.on('init', function (website) {
 });
 
 master.on('done', 'watch', function (website) { 
-    
+    let { file, } = config.watch;
+
+    //如果指定了路径，则输出信息。
+    //在 server 中要用到该监控进程的一些信息。
+    if (file) {
+        File.writeJSON(file, {
+            'process': {
+                'time': Date.now(),
+                'pid': process.pid,
+                'cwd': process.cwd(),
+                'argv': process.argv,
+                'env': process.env,
+            },
+        });
+    }
 });
 
 
