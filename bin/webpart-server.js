@@ -32,7 +32,7 @@ let done = cfg.done;
 
 server.start(cfg, function (app, info) {
     if (opts.open) {
-        openUrl(`http://localhost:${info.server.port}`);
+        openUrl(`http://localhost:${info.port}`);
     }
 
     done && done(app, info);
