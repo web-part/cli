@@ -28,10 +28,11 @@ module.exports = {
 
         let args = program.args;
         let opts = program.opts();
-        let config = Config.use(opts.config, options.config);
+        let config = Config.use(opts.config, options.config); //可能为空。
+        
 
         //设置全局的 console 配置。
-        if (config.console) {
+        if (config && config.console) {
             console.file = config.console.file;
         }
 

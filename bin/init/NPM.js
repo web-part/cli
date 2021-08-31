@@ -51,11 +51,12 @@ module.exports = {
 
             //如果指定了子目录，则提示进入该目录。
             if (project) {
-                console.log(`├──`, `cd ${project}`.magenta);
+                console.log(`├──`, `cd ${project}`.blue);
             }
 
-            console.log(`├──`, `npm install`.magenta);
-            console.log(`└──`, `webpart watch`.magenta);
+            console.log(`├──`, `npm install`.blue);
+            console.log(`├──`, `webpart server`.blue);
+            console.log(`└──`, `webpart watch`.blue);
 
             
 
