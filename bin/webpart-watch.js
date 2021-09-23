@@ -44,8 +44,11 @@ master.config(defaults);    //
 master.on(events);          //给外部一个机会来执行其它操作，如绑定 master 的各种事件。
 
 master.on('init', function (website) {
+    //此处提供静态的 require 语句以用于工具的分析。
+    /* require('@webpart/process-compat'); */
+    /* require('@webpart/process-normal'); */
     let mode = opts.compat ? 'compat' : 'normal';           //compat: 兼容模式。 normal: 标准模式。
-    let process = require(`@webpart/process-${mode}`);
+    let process = require(`@webpart/process-${mode}`);      //
 
     process.watch(website);
 });
