@@ -56,7 +56,7 @@ if (!list) {
 
 
 list.forEach((item) => {
-    File.write(item.file, item.newContent, null);
+    File.write(item.file, item.newContent);
 
     //输出如：
     //rename: /Login/Main2 --> /Login/Main(htdocs/views/login/Login/Main.js)

@@ -23,8 +23,8 @@ const Find = require('./find/Find');
 let { opts, args, config, program, } = Program.parse({
     'config': true,
     '[id]': '',
-    '-a, --all': 'find all mdoules to files.',
-    '-r, --repeat': 'find repeated mdoules to files.',
+    '-a, --all': 'find all modules to files.',
+    '-r, --repeat': 'find repeated modules to files.',
 });
 
 

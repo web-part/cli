@@ -10,6 +10,7 @@ program.usage('<command> [options]');   //定义使用方法。
 program.command('babel', 'babel a file.');
 program.command('build', 'compile website for production stage.');
 program.command('compile', 'compile website for development stage.');
+program.command('env', 'list all env files.');
 program.command('find', 'find a module to its file.');
 program.command('info', 'stat module info with specific id.');
 program.command('init', 'generate a new project from a template.');

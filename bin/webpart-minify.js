@@ -45,7 +45,7 @@ Js.minify({
     'src': src,
     
     'done': function (code) { 
-        File.write(dest, code, null);
+        File.write(dest, code);
 
         dest = path.relative(cwd, dest);
         

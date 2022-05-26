@@ -30,7 +30,8 @@ let defaults = config.master[''];
 let options = config.build[''];
 let events = config.masterEvents || {};
 
-
+//优先使用命令行中输入的值。
+options.env = opts.env || config.build.env || config.master.env;
 
 //命令中指定了使用独立打包的方式，合并相应的配置。
 if (opts.pack) {
