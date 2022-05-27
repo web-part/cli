@@ -24,6 +24,7 @@ let { opts, config, } = Program.parse({
     'config': true,
     '-c, --compat': 'compile with compat mode for IE.',
     '-p, --pack': 'pack related files to packages for lazyload.',
+    '-e, --env <name>': 'use enviroment.',
 });
 
 let defaults = config.master[''];
