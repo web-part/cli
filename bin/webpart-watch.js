@@ -6,6 +6,7 @@
 //  -c, --compat        使用兼容模式。 主要针对低版本的 IE。
 //  -p, --pack          使用分包模式。 把相关的资源打包成一个独立的分包以用于懒加载。
 //  -e, --env <name>    使用指定的环境。 如果不指定，则默认 name=`dev`。
+//  -i, --cover         使用 istanbul 进行代码覆盖率插桩。
 //示例：
 //  webpart watch
 //  webpart watch --compat
@@ -27,6 +28,7 @@ let { opts, config, } = Program.parse({
     '-c, --compat': 'compile with compat mode for IE.',
     '-p, --pack': 'pack related files to packages for lazyload.',
     '-e, --env <name>': 'use enviroment.',
+    '-i, --cover': 'use istanbul for coverage.',
 });
 
 let defaults = config.master[''];
@@ -47,19 +49,26 @@ if (opts.pack) {
 
 
 master.config(defaults);    //
-master.on(events);          //给外部一个机会来执行其它操作，如绑定 master 的各种事件。
+
 
 master.on('init', function (website) {
     //此处提供静态的 require 语句以用于工具的分析。
-    /* require('@webpart/process-compat'); */
-    /* require('@webpart/process-normal'); */
-    let mode = opts.compat ? 'compat' : 'normal';           //compat: 兼容模式。 normal: 标准模式。
-    let process = require(`@webpart/process-${mode}`);      //
+    let process = opts.compat ?     
+        require('@webpart/process-compat') :    //兼容模式。
+        require('@webpart/process-normal');     //标准模式。
+    let { babel, } = config.watch;
 
-    process.watch(website);
+    babel = babel || {};
+
+    process.watch(website, {
+        'dir': babel.dir || 'babel/',
+        'comment': babel.comment,
+        'cover': opts.cover,
+    });
     
 });
 
+master.on(events);          //给外部一个机会来执行其它操作，如绑定 master 的各种事件。
 
 master.on('done', 'watch', function (website) { 
     let { file, } = config.watch;
