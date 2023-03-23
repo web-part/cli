@@ -1,6 +1,6 @@
 {
   "name": "@webpart/cli",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "webpart cli tools.",
   "main": "index.js",
   "scripts": {},
@@ -26,8 +26,8 @@
     "@definejs/tree": "^1.0.5",
     "@webpart/console": "^2.1.1",
     "@webpart/env": "^2.1.2",
-    "@webpart/master": "^2.2.4",
-    "@webpart/process-babel": "^1.0.7",
+    "@webpart/master": "^2.2.6",
+    "@webpart/process-babel": "^2.0.0",
     "@webpart/process-compat": "^1.0.5",
     "@webpart/process-normal": "^1.0.2",
     "@webpart/server": "^4.5.4",
